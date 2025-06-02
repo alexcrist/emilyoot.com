@@ -1,0 +1,107 @@
+/* All layouts */
+
+.gridContainer {
+  display: flex;
+  width: 100dvw;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.column:not(:last-child) {
+  margin-right: 10px;
+}
+
+.image {
+  height: auto;
+  cursor: pointer;
+  transition:
+    all 700ms ease-in,
+    filter 200ms;
+}
+
+.image:hover {
+  filter: brightness(85%);
+}
+
+.image:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+/* Three column layout */
+
+.gridThreeColumn {
+  max-width: 900px;
+  flex-direction: row;
+}
+
+.gridThreeColumn .column {
+  display: flex;
+  flex-direction: column;
+}
+
+.gridThreeColumn .image {
+  width: 300px;
+  max-width: calc((100dvw - 20px) / 3);
+  height: auto;
+}
+
+/* Two column layout */
+
+.gridTwoColumn {
+  display: none;
+  flex-direction: row;
+}
+
+.gridTwoColumn .column {
+  display: flex;
+  flex-direction: column;
+}
+
+.gridTwoColumn .image {
+  width: 300px;
+  max-width: calc((100dvw - 10px) / 2);
+  height: auto;
+}
+
+/* One column layout */
+
+.gridOneColumn {
+  display: none;
+  flex-direction: column;
+}
+
+.gridOneColumn .image {
+  width: 100dvw;
+  height: auto;
+}
+
+/* Display best layout for screen size */
+
+@media screen and (max-width: 600px) {
+  .gridThreeColumn {
+    display: none;
+  }
+
+  .gridTwoColumn {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .gridTwoColumn {
+    display: none;
+  }
+
+  .gridOneColumn {
+    display: flex;
+  }
+}
