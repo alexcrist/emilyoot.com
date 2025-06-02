@@ -1,0 +1,52 @@
+---
+import type { SanityDocument } from "@sanity/client";
+import { Image } from "astro:assets";
+import "../../index.css";
+import { loadQuery } from "../../sanity/lib/load-query";
+import { urlForImage } from "../../sanity/lib/url-for-image.ts";
+
+export async function getStaticPaths() {
+  const { data: works } = await loadQuery<SanityDocument[]>({
+    query: `*[_type == "works"]`,
+  });
+  return works.map(({ slug }) => {
+    return { params: { slug: slug.current } };
+  });
+}
+
+const { params } = Astro;
+
+const { data: work }: { data: { image: Object; name: string } } =
+  await loadQuery({
+    query: `*[_type == "works" && slug.current == $slug][0]`,
+    params,
+  });
+
+const imageUrl = urlForImage(work.image).url();
+const imageAltText = `${work.name} by Emily Oot`;
+---
+
+<style>
+  .container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+</style>
+
+<div class="container">
+  <Image class="image" src={imageUrl} alt={imageAltText} inferSize={true} />
+</div>

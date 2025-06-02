@@ -1,0 +1,192 @@
+---
+// TODO: ADD PAGINATION
+
+import { Image } from "astro:assets";
+
+interface ImageData {
+  src: string;
+  alt: string;
+  onClick: () => null;
+}
+
+const { images, id } = Astro.props;
+
+const threeColumnLayout: [ImageData[], ImageData[], ImageData[]] = [[], [], []];
+for (let i = 0; i < images.length; i++) {
+  const columnIndex = i % 3;
+  threeColumnLayout[columnIndex].push(images[i]);
+}
+
+const twoColumnLayout: [ImageData[], ImageData[]] = [[], []];
+for (let i = 0; i < images.length; i++) {
+  const columnIndex = i % 2;
+  twoColumnLayout[columnIndex].push(images[i]);
+}
+---
+
+<style>
+  /* All layouts */
+
+  .grid-container {
+    display: flex;
+    width: 100dvw;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .grid {
+    display: flex;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .column:not(:last-child) {
+    margin-right: 10px;
+  }
+
+  .image {
+    height: auto;
+    cursor: pointer;
+    transition: filter 200ms;
+  }
+
+  .image:hover {
+    filter: brightness(85%);
+  }
+
+  .image:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  /* Three column layout */
+
+  .grid-three-column {
+    max-width: 900px;
+    flex-direction: row;
+  }
+
+  .grid-three-column .column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .grid-three-column .image {
+    width: 300px;
+    max-width: calc((100dvw - 20px) / 3);
+    height: auto;
+  }
+
+  /* Two column layout */
+
+  .grid-two-column {
+    display: none;
+    flex-direction: row;
+  }
+
+  .grid-two-column .column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .grid-two-column .image {
+    width: 300px;
+    max-width: calc((100dvw - 10px) / 2);
+    height: auto;
+  }
+
+  /* One column layout */
+
+  .grid-one-column {
+    display: none;
+    flex-direction: column;
+  }
+
+  .grid-one-column .image {
+    width: 100dvw;
+    height: auto;
+  }
+
+  /* Display best layout for screen size */
+
+  @media screen and (max-width: 600px) {
+    .grid-three-column {
+      display: none;
+    }
+
+    .grid-two-column {
+      display: flex;
+    }
+  }
+
+  @media screen and (max-width: 300px) {
+    .grid-two-column {
+      display: none;
+    }
+
+    .grid-one-column {
+      display: flex;
+    }
+  }
+</style>
+
+<div id={id} class="grid-container">
+  <div class="grid grid-three-column">
+    {
+      threeColumnLayout.map((column) => {
+        return (
+          <div class="column">
+            {column.map((image: ImageData) => {
+              return (
+                <Image
+                  class="image"
+                  src={image.src}
+                  alt={image.alt}
+                  inferSize={true}
+                />
+              );
+            })}
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <div class="grid grid-two-column">
+    {
+      twoColumnLayout.map((column) => {
+        return (
+          <div class="column">
+            {column.map((image: ImageData) => {
+              return (
+                <Image
+                  class="image"
+                  src={image.src}
+                  alt={image.alt}
+                  inferSize={true}
+                />
+              );
+            })}
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <div class="grid grid-one-column">
+    {
+      images.map((image: ImageData) => {
+        return (
+          <Image
+            class="image"
+            src={image.src}
+            alt={image.alt}
+            inferSize={true}
+          />
+        );
+      })
+    }
+  </div>
+</div>

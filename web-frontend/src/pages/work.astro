@@ -1,0 +1,31 @@
+---
+// TODO: add HEAD data with og: and such
+
+import type { SanityDocument } from "@sanity/client";
+import ImageGrid from "../components/ImageGrid.astro";
+import "../index.css";
+import { loadQuery } from "../sanity/lib/load-query";
+import { urlForImage } from "../sanity/lib/url-for-image";
+
+const { data: rawWorks } = await loadQuery<SanityDocument[]>({
+  query: `*[_type == "works"] | order(orderRank asc)`,
+});
+
+console.log("rw", rawWorks);
+
+const works = rawWorks.map((work) => {
+  return {
+    name: work.name,
+    imageUrl: urlForImage(work.image).width(300).url(),
+  };
+});
+
+const images = works.map((work) => {
+  return {
+    src: work.imageUrl,
+    alt: `${work.name} by Emily Oot`,
+  };
+});
+---
+
+<ImageGrid images={images} />
