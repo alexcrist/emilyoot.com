@@ -6,7 +6,7 @@ export const workType = defineType({
   type: "document",
   fields: [
     orderRankField({
-      type: "category",
+      type: "works",
       newItemPosition: "before",
     }),
     defineField({

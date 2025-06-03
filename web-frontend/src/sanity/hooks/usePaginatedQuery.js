@@ -1,10 +1,10 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { loadQuery } from "../lib/load-query";
 
 const DEFAULT_PAGE_SIZE = 10;
 
 export const usePaginatedQuery = (type, pageSize = DEFAULT_PAGE_SIZE) => {
-  const [items, setItems] = useState([]);
+  const [pages, setPages] = useState({});
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [hasReachedLastPage, setHasReachedLastPage] = useState(false);
@@ -19,15 +19,33 @@ export const usePaginatedQuery = (type, pageSize = DEFAULT_PAGE_SIZE) => {
     setIsLoading(true);
     const start = page * pageSize;
     const end = start + pageSize;
-    const query = `*[_type == "${type}"][${start}...${end}] | order(orderRank asc)`;
+    const query = `*[_type == "${type}"]|order(orderRank asc)[${start}...${end}]`;
     const { data } = await loadQuery({ query });
     if (data.length === 0) {
       setHasReachedLastPage(true);
     }
-    setItems((prev) => [...prev, ...data]);
+    setPages((oldPages) => {
+      return {
+        ...oldPages,
+        [page]: data,
+      };
+    });
     setPage((oldPage) => oldPage + 1);
     requestAnimationFrame(() => setIsLoading(false));
   }, [hasReachedLastPage, isLoading, page, pageSize, type]);
+
+  const items = useMemo(() => {
+    const items = [];
+    for (const page in pages) {
+      const pageItems = pages[page];
+      for (let i = 0; i < pageItems.length; i++) {
+        const item = pageItems[i];
+        const itemIndex = i + page * pageSize;
+        items[itemIndex] = item;
+      }
+    }
+    return items;
+  }, [pageSize, pages]);
 
   return { items, fetchNextPage, isLoading };
 };

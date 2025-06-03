@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
+// TODO: disable image right clicking, display copyright thing
+//   <meta
+// name="image_protection_blurb"
+// content="This photo is Copyright © 2023 Emily Oot LLC. All rights reserved."
+// />
+
 const FadeInImage = ({ ...props }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef(null);

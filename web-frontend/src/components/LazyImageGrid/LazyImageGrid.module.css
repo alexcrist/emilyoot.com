@@ -24,7 +24,7 @@
   height: auto;
   cursor: pointer;
   transition:
-    all 700ms ease-in,
+    opacity 700ms ease-in,
     filter 200ms;
 }
 

@@ -2,7 +2,9 @@
 // TODO: add HEAD data with og: and such
 
 import LazyImageGrid from "../components/LazyImageGrid/LazyImageGrid.jsx";
-import "../index.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<LazyImageGrid client:load />
+<BaseLayout>
+  <LazyImageGrid client:load />
+</BaseLayout>

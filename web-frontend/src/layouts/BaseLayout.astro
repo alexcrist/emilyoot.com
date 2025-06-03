@@ -1,0 +1,35 @@
+---
+import Footer from "../components/Footer.astro";
+import Head from "../components/Head.astro";
+import Header from "../components/Header/Header.astro";
+---
+
+<style>
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Comfortaa, sans-serif;
+    color: #9b9b9b;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .content {
+    flex: 1;
+  }
+</style>
+
+<html lang="en">
+  <Head />
+  <body>
+    <Header />
+    <div class="content">
+      <slot />
+    </div>
+    <Footer />
+  </body>
+</html>

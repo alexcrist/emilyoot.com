@@ -1,0 +1,61 @@
+---
+import { loadQuery } from "../sanity/lib/load-query";
+
+interface Social {
+  name: string;
+  url: string;
+}
+
+const { data: socials }: { data: Social[] } = await loadQuery({
+  query: '*[_type == "socials"] | order(orderRank asc)',
+});
+---
+
+<style>
+  .footer {
+    padding: 60px 0;
+  }
+
+  .socials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  a.social {
+    padding: 5px 10px;
+    text-align: center;
+    color: #9b9b9b;
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    font-weight: 300;
+    transition: opacity 100ms;
+  }
+
+  a:hover {
+    opacity: 0.5;
+  }
+
+  .copyright {
+    font-size: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+</style>
+
+<div class="footer">
+  <div class="socials">
+    {
+      socials.map((social) => {
+        return (
+          <a class="social" href={social.url} target="_blank">
+            {social.name}
+          </a>
+        );
+      })
+    }
+  </div>
+  <div class="copyright">© Copyright All Rights Reserved</div>
+</div>
