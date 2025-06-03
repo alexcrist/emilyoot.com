@@ -2,7 +2,6 @@
 
 .gridContainer {
   display: flex;
-  width: 100dvw;
   align-items: center;
   justify-content: center;
 }
@@ -39,7 +38,7 @@
 /* Three column layout */
 
 .gridThreeColumn {
-  max-width: 900px;
+  max-width: 1140px;
   flex-direction: row;
 }
 

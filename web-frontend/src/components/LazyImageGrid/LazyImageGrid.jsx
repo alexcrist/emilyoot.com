@@ -16,7 +16,7 @@ const LazyImageGrid = () => {
   const images = useMemo(() => {
     return items.map((work) => {
       return {
-        src: urlForImage(work.image).width(300).url(),
+        src: urlForImage(work.image).width(500).url(),
         alt: `${work.name} by Emily Oot`,
       };
     });

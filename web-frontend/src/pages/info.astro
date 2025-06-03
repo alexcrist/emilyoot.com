@@ -1,5 +1,83 @@
 ---
+import type { SanityImageAssetDocument } from "@sanity/client";
+import { PortableText } from "astro-portabletext";
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { loadQuery } from "../sanity/lib/load-query";
+import { urlForImage } from "../sanity/lib/url-for-image";
+
+const query = '*[_type == "info"][0]';
+const { data }: { data: { content: any; image: SanityImageAssetDocument } } =
+  await loadQuery({
+    query,
+  });
+const imageUrl = urlForImage(data.image).url();
 ---
 
-<BaseLayout> info </BaseLayout>
+<style>
+  .content {
+    font-size: 14px;
+    padding-left: min(20dvw, 150px);
+    display: flex;
+    color: #7a7a7a;
+  }
+
+  .image {
+    padding-left: 40px;
+    max-width: 30dvw;
+    height: auto;
+    object-fit: contain;
+    object-position: top;
+  }
+
+  @media screen and (max-width: 750px) {
+    .content {
+      padding-left: 0;
+    }
+
+    .image {
+      padding-left: 20px;
+    }
+  }
+
+  @media screen and (max-width: 650px) {
+    .content {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .image {
+      max-width: unset;
+      padding-left: unset;
+      padding-top: 40px;
+      max-width: calc(100dvw - 80px);
+    }
+  }
+
+  @media screen and (max-width: 300px) {
+    .content {
+      font-size: 12px;
+    }
+  }
+</style>
+
+<style is:global>
+  .content a {
+    color: #7a7a7a;
+  }
+</style>
+
+<BaseLayout>
+  <div class="content">
+    <div>
+      <PortableText value={data.content} />
+    </div>
+    <Image
+      class="image"
+      src={imageUrl}
+      alt="Emily Oot portrait"
+      width="327"
+      height="436"
+    />
+  </div></BaseLayout
+>
