@@ -1,5 +1,6 @@
 import react from "@astrojs/react";
 import sanity from "@sanity/astro";
+import astroIcon from "astro-icon";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
@@ -12,5 +13,6 @@ export default defineConfig({
       studioBasePath: "/studio",
     }),
     react(),
+    astroIcon(),
   ],
 });

@@ -6,18 +6,19 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.jsx";
 import ScrollWatcher from "../ScrollWatcher.jsx";
 import styles from "./LazyImageGrid.module.css";
 
-const LazyImageGrid = () => {
-  const { items, fetchNextPage, isLoading } = usePaginatedQuery("works");
+const LazyImageGrid = ({ data }) => {
+  const { items, fetchNextPage, isLoading } = usePaginatedQuery(data);
 
   const onNearBottom = useCallback(() => {
     fetchNextPage();
   }, [fetchNextPage]);
 
   const images = useMemo(() => {
-    return items.map((work) => {
+    return items.map((item) => {
       return {
-        src: urlForImage(work.image).width(500).url(),
-        alt: `${work.name} by Emily Oot`,
+        src: urlForImage(item.image).width(500).url(),
+        alt: `${item.name} by Emily Oot`,
+        link: `/work/${item.slug.current}`,
       };
     });
   }, [items]);
@@ -55,6 +56,7 @@ const LazyImageGrid = () => {
                         className={styles.image}
                         src={image.src}
                         alt={image.alt}
+                        link={image.link}
                       />
                     );
                   })}
@@ -74,6 +76,7 @@ const LazyImageGrid = () => {
                         className={styles.image}
                         src={image.src}
                         alt={image.alt}
+                        link={image.link}
                       />
                     );
                   })}
@@ -90,6 +93,7 @@ const LazyImageGrid = () => {
                   className={styles.image}
                   src={image.src}
                   alt={image.alt}
+                  link={image.link}
                 />
               );
             })}

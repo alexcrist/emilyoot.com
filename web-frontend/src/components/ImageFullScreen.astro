@@ -1,0 +1,105 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import { loadQuery } from "../sanity/lib/load-query";
+import { urlForImage } from "../sanity/lib/url-for-image";
+
+const { sanityType, originPageUrl, slug, prevSlug, nextSlug } = Astro.props;
+
+const { data: item }: { data: { image: Object; name: string } } =
+  await loadQuery({
+    query: `*[_type == $sanityType && slug.current == $slug][0]`,
+    params: { sanityType, slug },
+  });
+
+const imageUrl = urlForImage(item.image).url();
+const imageAltText = `${item.name} by Emily Oot`;
+
+console.log("prevSlug", prevSlug);
+console.log("nextSlug", nextSlug);
+---
+
+<style>
+  .container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+
+  .icon {
+    color: #bbb;
+    position: fixed;
+    transition: opacity 100ms;
+    padding: 20px;
+  }
+
+  .icon:hover {
+    opacity: 0.5;
+  }
+
+  .xIcon {
+    transform: rotate(45deg);
+    top: 0;
+    right: 0;
+  }
+
+  .prevIcon {
+    transform: rotate(180deg);
+    left: 0;
+    top: 50dvh;
+  }
+
+  .nextIcon {
+    right: 0;
+    top: 50dvh;
+  }
+</style>
+
+<div class="container">
+  <Image class="image" src={imageUrl} alt={imageAltText} inferSize={true} />
+  <a href={originPageUrl}>
+    <Icon
+      class="icon xIcon"
+      name="hugeicons:plus-sign"
+      width="40"
+      height="40"
+    />
+  </a>
+  {
+    prevSlug && (
+      <a href={`${originPageUrl}/${prevSlug}`}>
+        <Icon
+          class="icon prevIcon"
+          name="hugeicons:arrow-right-01"
+          width="40"
+          height="40"
+        />
+      </a>
+    )
+  }
+  {
+    nextSlug && (
+      <a href={`${originPageUrl}/${nextSlug}`}>
+        <Icon
+          class="icon nextIcon"
+          name="hugeicons:arrow-right-01"
+          width="40"
+          height="40"
+        />
+      </a>
+    )
+  }
+</div>

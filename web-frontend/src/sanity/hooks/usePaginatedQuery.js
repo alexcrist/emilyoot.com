@@ -19,8 +19,10 @@ export const usePaginatedQuery = (type, pageSize = DEFAULT_PAGE_SIZE) => {
     setIsLoading(true);
     const start = page * pageSize;
     const end = start + pageSize;
-    const query = `*[_type == "${type}"]|order(orderRank asc)[${start}...${end}]`;
-    const { data } = await loadQuery({ query });
+    const { data } = await loadQuery({
+      query: `*[_type == $type]|order(orderRank asc)[${start}...${end}]`,
+      params: { type },
+    });
     if (data.length === 0) {
       setHasReachedLastPage(true);
     }

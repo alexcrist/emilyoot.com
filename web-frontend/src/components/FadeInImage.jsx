@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 // content="This photo is Copyright © 2023 Emily Oot LLC. All rights reserved."
 // />
 
-const FadeInImage = ({ ...props }) => {
+const FadeInImage = ({ link, ...props }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
@@ -21,7 +21,11 @@ const FadeInImage = ({ ...props }) => {
     img.addEventListener("load", onLoad);
     return () => img.removeEventListener("load", onLoad);
   }, []);
-  return <img ref={ref} style={{ opacity: isLoaded ? 1 : 0 }} {...props} />;
+  return (
+    <a href={link}>
+      <img ref={ref} style={{ opacity: isLoaded ? 1 : 0 }} {...props} />
+    </a>
+  );
 };
 
 export default FadeInImage;
