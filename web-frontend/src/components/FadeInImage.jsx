@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 // content="This photo is Copyright © 2023 Emily Oot LLC. All rights reserved."
 // />
 
+// TODO: allow optional description
+
 const FadeInImage = ({ link, ...props }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef(null);
