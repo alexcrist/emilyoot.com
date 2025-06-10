@@ -1,10 +1,11 @@
 ---
+import LazyImageGrid from "../components/LazyImageGrid/LazyImageGrid";
 import PasswordProtector from "../components/PasswordProtector/PasswordProtector";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout>
   <PasswordProtector client:load>
-    <div>TODO: put prints here</div>
+    <LazyImageGrid data="prints" urlBase="prints" client:load />
   </PasswordProtector>
 </BaseLayout>

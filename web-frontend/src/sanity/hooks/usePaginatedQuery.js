@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { loadQuery } from "../lib/load-query";
+import { loadQuery } from "../lib/loadQuery";
 
 const DEFAULT_PAGE_SIZE = 10;
 

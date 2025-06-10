@@ -3,7 +3,7 @@ import type { SanityDocument } from "@sanity/client";
 import { undefined } from "astro:schema";
 import ImageFullScreen from "../../components/ImageFullScreen.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { loadQuery } from "../../sanity/lib/load-query";
+import { loadQuery } from "../../sanity/lib/loadQuery";
 
 const { params, props } = Astro;
 
@@ -20,7 +20,7 @@ export async function getStaticPaths() {
 }
 ---
 
-<BaseLayout>
+<BaseLayout noHeader noFooter>
   <ImageFullScreen
     sanityType="works"
     originPageUrl="/work"

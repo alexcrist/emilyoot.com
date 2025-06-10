@@ -3,8 +3,8 @@ import type { SanityImageAssetDocument } from "@sanity/client";
 import { PortableText } from "astro-portabletext";
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { loadQuery } from "../sanity/lib/load-query";
-import { urlForImage } from "../sanity/lib/url-for-image";
+import { loadQuery } from "../sanity/lib/loadQuery";
+import { urlForImage } from "../sanity/lib/urlForImage";
 
 const query = '*[_type == "info"][0]';
 const { data }: { data: { content: any; image: SanityImageAssetDocument } } =

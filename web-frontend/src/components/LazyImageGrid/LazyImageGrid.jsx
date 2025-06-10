@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from "react";
 import { usePaginatedQuery } from "../../sanity/hooks/usePaginatedQuery.js";
-import { urlForImage } from "../../sanity/lib/url-for-image.js";
+import { urlForImage } from "../../sanity/lib/urlForImage.js";
 import FadeInImage from "../FadeInImage.jsx";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner.jsx";
 import ScrollWatcher from "../ScrollWatcher.jsx";
 import styles from "./LazyImageGrid.module.css";
 
-const LazyImageGrid = ({ data }) => {
+const LazyImageGrid = ({ data, urlBase }) => {
   const { items, fetchNextPage, isLoading } = usePaginatedQuery(data);
 
   const onNearBottom = useCallback(() => {
@@ -18,10 +18,10 @@ const LazyImageGrid = ({ data }) => {
       return {
         src: urlForImage(item.image).width(500).url(),
         alt: `${item.name} by Emily Oot`,
-        link: `/work/${item.slug.current}`,
+        link: `/${urlBase}/${item.slug.current}`,
       };
     });
-  }, [items]);
+  }, [items, urlBase]);
 
   const threeColumnLayout = useMemo(() => {
     const threeColumnLayout = [[], [], []];

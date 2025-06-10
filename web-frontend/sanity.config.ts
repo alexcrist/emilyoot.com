@@ -23,6 +23,12 @@ export default defineConfig({
               title: "Work",
             }),
             orderableDocumentListDeskItem({
+              type: "prints",
+              S,
+              context,
+              title: "Prints",
+            }),
+            orderableDocumentListDeskItem({
               type: "socials",
               S,
               context,

@@ -12,10 +12,12 @@ export const socialType = defineType({
     defineField({
       name: "name",
       type: "string",
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "url",
       type: "url",
+      validation: (Rule) => Rule.required(),
     }),
   ],
 });

@@ -1,12 +1,12 @@
 import { orderRankField } from "@sanity/orderable-document-list";
 import { defineField, defineType } from "sanity";
 
-export const workType = defineType({
-  name: "works",
+export const printType = defineType({
+  name: "prints",
   type: "document",
   fields: [
     orderRankField({
-      type: "works",
+      type: "prints",
       newItemPosition: "before",
     }),
     defineField({

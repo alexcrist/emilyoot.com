@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --open",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -19,6 +19,7 @@
     "astro": "^5.8.1",
     "astro-icon": "^1.1.5",
     "astro-portabletext": "^0.11.1",
+    "lodash": "^4.17.21",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-is": "^19.1.0",

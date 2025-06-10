@@ -9,10 +9,12 @@ export const infoType = defineType({
       name: "content",
       type: "array",
       of: [{ type: "block" }],
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "image",
       type: "image",
+      validation: (Rule) => Rule.required(),
     }),
   ],
   preview: {
