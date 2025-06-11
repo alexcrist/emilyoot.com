@@ -1,13 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import Stripe from "stripe";
+import { getStripe } from "../util/stripe";
 
-const { STRIPE_SECRET_KEY } = process.env;
-
-if (!STRIPE_SECRET_KEY) {
-  throw Error("Could not get STRIPE_SECRET_KEY.");
-}
-
-const stripe = new Stripe(STRIPE_SECRET_KEY);
+const stripe = getStripe();
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const products = await stripe.products.list({

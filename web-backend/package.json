@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@vercel/node": "^5.2.1",
+    "micro": "^10.0.1",
     "stripe": "^18.2.1"
   }
 }
