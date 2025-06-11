@@ -5,8 +5,7 @@ import { getStripe } from "../util/stripe";
 const stripe = getStripe();
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  console.log("req body", req.body);
-  const { items } = JSON.parse(req.body);
+  const { items } = req.body;
 
   // Verify that there is enough inventory of each product being purchased
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
