@@ -10,6 +10,9 @@ if (!STRIPE_SECRET_KEY) {
 const stripe = new Stripe(STRIPE_SECRET_KEY);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const products = await stripe.products.list({ active: true });
+  const products = await stripe.products.list({
+    active: true,
+    expand: ["data.default_price"],
+  });
   res.status(200).json(products);
 }
