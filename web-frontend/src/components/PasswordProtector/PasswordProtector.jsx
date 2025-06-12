@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { obfuscate } from "../../util/obfuscate";
 import styles from "./PasswordProtector.module.css";
 
 const PasswordProtector = ({ children }) => {
@@ -8,20 +7,30 @@ const PasswordProtector = ({ children }) => {
   const [didGuessWrong, setDidGuessWrong] = useState(false);
   const [value, setValue] = useState("");
   const onChange = (e) => setValue(e.target.value);
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (isLoading) {
       return;
     }
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      if ("9cb3730174e79e7755aa2c8722ad05b0" === obfuscate(value)) {
-        setIsPasswordCorrect(true);
-      } else {
-        setDidGuessWrong(true);
-      }
-    }, 600);
+    const res = await fetch(
+      "https://emilyoot-com.vercel.app/api/checkPrintsPassword",
+      {
+        method: "POST",
+        body: JSON.stringify({ password: value }),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    const { isCorrect } = await res.json();
+    setIsLoading(false);
+    if (isCorrect) {
+      setIsPasswordCorrect(true);
+    } else {
+      setDidGuessWrong(true);
+    }
   };
   let statusText = "A password is required to view this page.";
   if (isLoading) {

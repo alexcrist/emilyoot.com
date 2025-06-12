@@ -1,7 +1,9 @@
 ---
+import _ from "lodash";
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import CopyrightImage from "../../components/Copyright/CopyrightImage";
 
 export async function getStaticPaths() {
   const res = await fetch(
@@ -13,13 +15,24 @@ export async function getStaticPaths() {
     const id = product.id;
     const name = product.name;
     const image = product.images[0];
-    const price = 1; // TODO
-    if (name && image && price && id) {
+    const price = product.default_price.unit_amount;
+    const description = product.description;
+    const priceId = product.default_price.id;
+    const quantity = product.metadata?.quantity ?? 0;
+    if (name && image && price && id && priceId && quantity > 0) {
+      const prettyPrice = (price / 100).toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+      });
       products.push({
         id,
+        priceId,
         name,
         image,
         price,
+        prettyPrice,
+        description,
+        quantity,
       });
     }
   }
@@ -37,10 +50,7 @@ export async function getStaticPaths() {
 
 const { product } = Astro.props;
 
-const prettyPrice = product.price.toLocaleString("en-US", {
-  style: "currency",
-  currency: "USD",
-});
+const quantityOptions = _.range(1, parseInt(product.quantity) + 1);
 ---
 
 <style>
@@ -49,7 +59,8 @@ const prettyPrice = product.price.toLocaleString("en-US", {
     flex-direction: column;
     align-items: flex-start;
     width: 700px;
-    max-width: 100%;
+    max-width: 100dvw;
+    margin: 0 auto;
   }
 
   a.back {
@@ -60,6 +71,7 @@ const prettyPrice = product.price.toLocaleString("en-US", {
     line-height: 1;
     font-size: 16px;
     transition: 200ms all;
+    padding: 10px;
   }
 
   a.back:hover {
@@ -75,18 +87,17 @@ const prettyPrice = product.price.toLocaleString("en-US", {
   .product {
     padding: 40px 0;
     display: flex;
-    flex-wrap: wrap;
   }
 
   .image {
-    width: calc(50% - 20px);
+    width: calc(60% - 20px);
     padding-right: 20px;
     padding-bottom: 20px;
     height: auto;
   }
 
   .name {
-    font-size: 18px;
+    font-size: 20px;
     color: #252525;
     margin-bottom: 10px;
   }
@@ -95,6 +106,111 @@ const prettyPrice = product.price.toLocaleString("en-US", {
     font-size: 16px;
     margin-bottom: 10px;
     color: #252525;
+  }
+
+  .shipping {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  form {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .quantity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .quantity label {
+    font-size: 16px;
+    margin-bottom: 2px;
+    color: #7a7a7a;
+  }
+
+  .quantity select {
+    min-width: 100px;
+    padding: 10px 20px;
+    color: #7a7a7a;
+    font-family: Comfortaa, sans-serif;
+    min-width: 120px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    border: 1px solid #9a9a9a;
+    height: 40px;
+    cursor: pointer;
+    transition: 200ms filter;
+    background: transparent;
+    outline: none;
+  }
+
+  .quantity select:hover {
+    filter: brightness(0.8);
+  }
+
+  input[type="submit"] {
+    min-width: 120px;
+    text-align: center;
+    font-family: Comfortaa, sans-serif;
+    font-size: 16px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    color: #7a7a7a;
+    background-color: transparent;
+    border: 1px solid #9a9a9a;
+    border-radius: 2px;
+    font-weight: 300;
+    height: 40px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: 200ms filter;
+  }
+
+  input[type="submit"]:hover {
+    filter: brightness(0.8);
+  }
+
+  .select-container {
+    position: relative;
+  }
+
+  .select-icon {
+    position: absolute;
+    z-index: 100;
+    height: 100%;
+    right: 10px;
+    transform: rotate(90deg);
+    pointer-events: none;
+  }
+
+  .description {
+    margin-top: 40px;
+    font-size: 14px;
+    color: #7a7a7a;
+  }
+
+  @media screen and (max-width: 500px) {
+    .product {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .image {
+      width: calc(75dvw - 40px);
+      padding: 0 20px;
+    }
+
+    .details {
+      padding: 20px 20px 0;
+      text-align: center;
+    }
+
+    .quantity {
+      align-items: center;
+    }
   }
 </style>
 
@@ -110,17 +226,105 @@ const prettyPrice = product.price.toLocaleString("en-US", {
       <div>Back to shop</div>
     </a>
     <div class="product">
-      <Image
-        class="image"
+      <CopyrightImage
+        client:load
+        className="image"
         src={product.image}
         alt={`${product.name} by Emily Oot`}
-        inferSize
       />
       <div class="details">
         <div class="name">{product.name}</div>
-        <div class="price">{prettyPrice} USD</div>
-        <div class="price">Shipping costs will be calculated at checkout.</div>
+        <div class="price">{product.prettyPrice} USD</div>
+        <div class="shipping">
+          Shipping costs will be calculated at checkout.
+        </div>
+        <form id="purchase-form">
+          <div class="quantity">
+            <label for="select-quantity">Quantity</label>
+            <div class="select-container">
+              <select id="select-quantity">
+                {
+                  quantityOptions.map((quantity) => {
+                    return <option value={quantity}>{quantity}</option>;
+                  })
+                }
+              </select>
+              <Icon
+                class="select-icon"
+                name="hugeicons:arrow-right-01"
+                width="20"
+                height="20"
+              />
+            </div>
+          </div>
+          <input type="submit" value="Checkout" />
+        </form>
+        {
+          product.description && (
+            <div class="description">{product.description}</div>
+          )
+        }
       </div>
     </div>
   </div>
 </BaseLayout>
+
+<template id="price-id" type="application/text">
+  {product.priceId}
+</template>
+<script>
+  import { loadStripe } from "@stripe/stripe-js";
+
+  // Load stripe
+  const publishableKey =
+    "pk_test_51RYaJ7Gdtk1mzY8zGzya3v5CYxSzunz6I5u0SLdntyf9p0fxweVpaLIGD8gkHDaW8rnX8WXdDSOcIBEkBVjEouiT00acDFMocb";
+  const stripe = await loadStripe(publishableKey);
+  if (stripe === null) {
+    throw Error("Failed to load stripe.");
+  }
+
+  // Get product's price ID
+  const priceId = document.getElementById("price-id")?.innerHTML;
+  if (!priceId) {
+    throw Error("Could not get product's price ID.");
+  }
+
+  // On form submission...
+  const selectQuantity: HTMLInputElement | null =
+    document.querySelector("#select-quantity");
+  const inputButton: HTMLInputElement | null = document.querySelector(
+    'input[type="submit"]',
+  );
+  const form = document.querySelector("#purchase-form");
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    // Show loading status
+    if (inputButton) {
+      inputButton.value = "Loading...";
+      inputButton.disabled = true;
+    }
+
+    // Get quantity
+    const quantity = selectQuantity?.value;
+    if (!quantity) {
+      throw Error("Could not get quantity.");
+    }
+
+    // Go to Stripe checkout
+    const reqBody = { items: [{ priceId, quantity }] };
+    const res = await fetch(
+      "https://emilyoot-com.vercel.app/api/createCheckoutSession",
+      {
+        method: "POST",
+        body: JSON.stringify(reqBody),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    const { sessionId } = await res.json();
+    await stripe.redirectToCheckout({ sessionId });
+  });
+</script>

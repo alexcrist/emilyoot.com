@@ -3,7 +3,7 @@ import Footer from "../components/Footer.astro";
 import Head from "../components/Head.astro";
 import Header from "../components/Header/Header.astro";
 
-const { noHeader, noFooter } = Astro.props;
+const { noHeader, noFooter, noIndex } = Astro.props;
 ---
 
 <style>
@@ -22,13 +22,14 @@ const { noHeader, noFooter } = Astro.props;
 
   .content {
     flex: 1;
-    max-width: 1140px;
-    padding: 0 40px;
+    width: 1140px;
+    max-width: 100dvw;
+    padding: 0;
   }
 </style>
 
 <html lang="en">
-  <Head />
+  <Head noIndex={noIndex} />
   <body>
     {!noHeader && <Header />}
     <div class="content">

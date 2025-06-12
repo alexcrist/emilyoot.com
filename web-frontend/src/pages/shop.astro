@@ -1,7 +1,5 @@
 ---
-// TODO: MAKE MOBILE RESPONSIVE
-
-import { Image } from "astro:assets";
+import CopyrightImage from "../components/Copyright/CopyrightImage";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const res = await fetch(
@@ -13,25 +11,45 @@ for (const product of json.data) {
   const id = product.id;
   const name = product.name;
   const image = product.images[0];
-  const price = 1; // TODO
-  if (name && image && price) {
+  const price = product.default_price.unit_amount;
+  const description = product.description;
+  const priceId = product.default_price.id;
+  const quantity = product.metadata?.quantity ?? 0;
+  if (name && image && price && id && priceId && quantity > 0) {
+    const prettyPrice = (price / 100).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
     products.push({
       id,
+      priceId,
       name,
       image,
       price,
+      prettyPrice,
+      description,
+      quantity,
     });
   }
 }
 ---
 
 <style>
+  .no-products-available {
+    font-size: 16px;
+    text-align: center;
+    align-self: center;
+    margin: 0 auto;
+    padding: 60px;
+  }
+
   .products {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     width: 1140px;
-    max-width: 100%;
+    max-width: calc(100dvw - 20px);
+    padding: 10px;
   }
 
   a.product {
@@ -41,14 +59,14 @@ for (const product of json.data) {
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 20px;
-    max-width: calc(33% - 20px);
-    transition: filter 300ms;
+    max-width: calc((100dvw - 20px) / 2 - 20px);
+    transition: opacity 300ms;
     text-decoration: none;
     color: #7a7a7a;
   }
 
   .product:hover {
-    filter: brightness(0.8);
+    opacity: 0.8;
   }
 
   .image {
@@ -71,23 +89,26 @@ for (const product of json.data) {
 </style>
 
 <BaseLayout>
+  {
+    products.length === 0 && (
+      <div class="no-products-available">
+        Nothing is available at this time.
+      </div>
+    )
+  }
   <div class="products">
     {
       products.map((product) => {
-        const prettyPrice = product.price.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-        });
         return (
           <a href={`/shop/${product.id}`} class="product">
-            <Image
-              class="image"
+            <CopyrightImage
+              client:load
+              className="image"
               src={product.image}
               alt={`${product.name} by Emily Oot`}
-              inferSize
             />
             <div class="name">{product.name}</div>
-            <div class="price">{prettyPrice}</div>
+            <div class="price">{product.prettyPrice}</div>
           </a>
         );
       })

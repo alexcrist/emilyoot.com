@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-
-// TODO: disable image right clicking, display copyright thing
-//   <meta
-// name="image_protection_blurb"
-// content="This photo is Copyright © 2023 Emily Oot LLC. All rights reserved."
-// />
-
-// TODO: allow optional description
+import { useCopyright } from "./Copyright/useCopyright.jsx";
 
 const FadeInImage = ({ link, ...props }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const { copyrightElement, onRightClick } = useCopyright();
+
+  // Fade in image
   const ref = useRef(null);
   useEffect(() => {
     const img = ref.current;
@@ -23,10 +20,19 @@ const FadeInImage = ({ link, ...props }) => {
     img.addEventListener("load", onLoad);
     return () => img.removeEventListener("load", onLoad);
   }, []);
+
   return (
-    <a href={link}>
-      <img ref={ref} style={{ opacity: isLoaded ? 1 : 0 }} {...props} />
-    </a>
+    <>
+      <a href={link}>
+        <img
+          ref={ref}
+          style={{ opacity: isLoaded ? 1 : 0 }}
+          onContextMenu={onRightClick}
+          {...props}
+        />
+      </a>
+      {copyrightElement}
+    </>
   );
 };
 

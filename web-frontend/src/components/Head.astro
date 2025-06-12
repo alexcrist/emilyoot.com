@@ -7,6 +7,8 @@ const canonicalUrl = "https://emilyoot.com" + Astro.url.pathname;
 
 const openGraphUrl = "https://emilyoot.com";
 const openGraphImageUrl = "https://emilyoot.com/open_graph_image.jpg";
+
+const { noIndex } = Astro.props;
 ---
 
 <head>
@@ -17,7 +19,13 @@ const openGraphImageUrl = "https://emilyoot.com/open_graph_image.jpg";
   />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="robots" content="index, follow, noai, noimageai" />
+  {
+    noIndex ? (
+      <meta name="robots" content="noindex, noai, noimageai" />
+    ) : (
+      <meta name="robots" content="index, follow, noai, noimageai" />
+    )
+  }
   <link rel="canonical" href={canonicalUrl} />
 
   <!-- Font -->

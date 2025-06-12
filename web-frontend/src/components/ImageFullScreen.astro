@@ -1,8 +1,8 @@
 ---
 import { Icon } from "astro-icon/components";
-import { Image } from "astro:assets";
 import { loadQuery } from "../sanity/lib/loadQuery";
 import { urlForImage } from "../sanity/lib/urlForImage";
+import CopyrightImage from "./Copyright/CopyrightImage";
 
 const { sanityType, originPageUrl, slug, prevSlug, nextSlug } = Astro.props;
 
@@ -69,7 +69,12 @@ console.log("nextSlug", nextSlug);
 </style>
 
 <div class="container">
-  <Image class="image" src={imageUrl} alt={imageAltText} inferSize={true} />
+  <CopyrightImage
+    client:load
+    className="image"
+    src={imageUrl}
+    alt={imageAltText}
+  />
   <a href={originPageUrl}>
     <Icon
       class="icon xIcon"

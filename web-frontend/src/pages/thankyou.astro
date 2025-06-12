@@ -1,0 +1,50 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const supportEmail = "emilyaoot@gmail.com";
+---
+
+<style>
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #7a7a7a;
+    max-width: 600px;
+    text-align: center;
+    max-width: calc(100dvw - 40px);
+  }
+
+  .thankyou {
+    padding: 40px;
+    font-size: 18px;
+  }
+
+  .thankyou a {
+    color: #7a7a7a;
+  }
+
+  .image {
+    object-fit: contain;
+    object-position: top;
+    height: auto;
+    max-width: calc(100dvw - 40px);
+  }
+</style>
+
+<BaseLayout noIndex>
+  <div class="content">
+    <div class="thankyou">
+      Thank you for your order! If you have any questions, please email
+      <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
+    </div>
+    <Image
+      class="image"
+      src="/open_graph_image.jpg"
+      alt="Flower painting"
+      width="500"
+      height="500"
+    />
+  </div>
+</BaseLayout>
