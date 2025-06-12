@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import Stripe from "stripe";
+import { setCorsHeaders } from "../util/cors";
 import { getStripe } from "../util/stripe";
 
 interface Item {
@@ -10,7 +11,10 @@ interface Item {
 const stripe = getStripe();
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "POST") {
+  setCorsHeaders(req, res);
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  } else if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
@@ -19,8 +23,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     items = body.items;
   } catch (err) {
-    console.error(err);
-    console.error("req.body", req.body);
     return res.status(400).json({ error: "Invalid JSON" });
   }
 
@@ -45,8 +47,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const session = await stripe.checkout.sessions.create({
     line_items: lineItems,
     mode: "payment",
+    payment_method_types: ["card"],
     success_url: "https://emilyoot.com/thankyou",
     cancel_url: "https://emilyoot.com/shop",
+    billing_address_collection: "required",
+    shipping_address_collection: {
+      allowed_countries: ["US", "CA"],
+    },
+    shipping_options: [
+      {
+        shipping_rate_data: {
+          type: "fixed_amount",
+          fixed_amount: {
+            amount: 1499,
+            currency: "usd",
+          },
+          display_name: "Standard shipping",
+        },
+      },
+    ],
   });
   res.status(200).json({ sessionId: session.id });
 }
