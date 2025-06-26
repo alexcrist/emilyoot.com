@@ -3,9 +3,10 @@ import sanity from "@sanity/astro";
 import astroIcon from "astro-icon";
 import { defineConfig } from "astro/config";
 
+import vercel from "@astrojs/vercel";
+
 export default defineConfig({
   site: "https://emilyoot.com",
-  output: "static",
   integrations: [
     sanity({
       projectId: "42gabzk9",
@@ -17,4 +18,6 @@ export default defineConfig({
     react(),
     astroIcon(),
   ],
+  output: "server",
+  adapter: vercel(),
 });

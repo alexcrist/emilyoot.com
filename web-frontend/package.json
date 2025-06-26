@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
+    "@astrojs/vercel": "^8.2.0",
     "@iconify-json/hugeicons": "^1.2.5",
     "@portabletext/types": "^2.0.13",
     "@sanity/astro": "^3.2.6",
