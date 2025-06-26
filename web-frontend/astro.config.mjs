@@ -5,6 +5,7 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   site: "https://emilyoot.com",
+  output: "static",
   integrations: [
     sanity({
       projectId: "42gabzk9",
