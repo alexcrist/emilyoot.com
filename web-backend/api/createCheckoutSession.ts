@@ -59,10 +59,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         shipping_rate_data: {
           type: "fixed_amount",
           fixed_amount: {
-            amount: 1499,
+            amount: 0,
             currency: "usd",
           },
-          display_name: "Standard shipping",
+          display_name: "Free shipping",
         },
       },
     ],
