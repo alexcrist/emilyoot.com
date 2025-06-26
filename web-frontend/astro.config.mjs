@@ -4,6 +4,7 @@ import astroIcon from "astro-icon";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
+  site: "https://emilyoot.com",
   integrations: [
     sanity({
       projectId: "42gabzk9",
