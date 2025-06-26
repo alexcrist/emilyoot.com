@@ -4,6 +4,7 @@ const ALLOWED_ORIGINS = [
   "https://emilyoot.com",
   "http://localhost:4321",
   "https://alexcrist.github.io",
+  "https://emilyoot-com-astro-frontend-kfeicjpyy-alexander-crists-projects.vercel.app/",
 ];
 
 export const setCorsHeaders = (req: VercelRequest, res: VercelResponse) => {
