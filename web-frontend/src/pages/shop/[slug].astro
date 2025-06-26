@@ -277,7 +277,7 @@ const quantityOptions = _.range(1, parseInt(product.quantity) + 1);
 
   // Load stripe
   const publishableKey =
-    "pk_test_51RYaJ7Gdtk1mzY8zGzya3v5CYxSzunz6I5u0SLdntyf9p0fxweVpaLIGD8gkHDaW8rnX8WXdDSOcIBEkBVjEouiT00acDFMocb";
+    "pk_live_51RYaJ1GX2sX9M7ENE9AW80VHE5a4A9XuuJ4m0TOZkcIejb7ZMjmMj3bQUJufrWVF4bW5sFYI49pJ7kNeg94a65EP00xnqGmvrz";
   const stripe = await loadStripe(publishableKey);
   if (stripe === null) {
     throw Error("Failed to load stripe.");
