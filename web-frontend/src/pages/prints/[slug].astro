@@ -10,7 +10,6 @@ const { data } = await loadQuery<SanityDocument[]>({
   query: `*[_type == "prints"]|order(orderRank asc)`,
 });
 const index = data.findIndex(({ slug }) => slug.current === params.slug);
-console.log(index);
 const prevSlug = index > 0 ? data[index - 1].slug.current : undefined;
 const nextSlug =
   index < data.length - 1 ? data[index + 1].slug.current : undefined;
