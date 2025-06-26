@@ -6,7 +6,7 @@ import { defineConfig } from "astro/config";
 import vercel from "@astrojs/vercel";
 
 export default defineConfig({
-  site: "https://emilyoot-com-astro-frontend-kfeicjpyy-alexander-crists-projects.vercel.app/",
+  site: "https://emilyoot-com-astro-frontend-ssr.vercel.app/",
   integrations: [
     sanity({
       projectId: "42gabzk9",
