@@ -1,54 +1,45 @@
 ---
 import _ from "lodash";
 import { Icon } from "astro-icon/components";
-import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CopyrightImage from "../../components/Copyright/CopyrightImage";
 
-export async function getStaticPaths() {
-  const res = await fetch(
-    "https://emilyoot-com.vercel.app/api/getStripeProducts",
-  );
-  const json = await res.json();
-  const products = [];
-  for (const product of json.data) {
-    const id = product.id;
-    const name = product.name;
-    const image = product.images[0];
-    const price = product.default_price.unit_amount;
-    const description = product.description;
-    const priceId = product.default_price.id;
-    const quantity = product.metadata?.quantity ?? 0;
-    if (name && image && price && id && priceId && quantity > 0) {
-      const prettyPrice = (price / 100).toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-      });
-      products.push({
-        id,
-        priceId,
-        name,
-        image,
-        price,
-        prettyPrice,
-        description,
-        quantity,
-      });
-    }
-  }
-  return products.map((product) => {
-    return {
-      params: {
-        slug: product.id,
-      },
-      props: {
-        product,
-      },
-    };
-  });
-}
+const { params } = Astro;
 
-const { product } = Astro.props;
+const res = await fetch(
+  "https://emilyoot-com.vercel.app/api/getStripeProducts",
+);
+const json = await res.json();
+const products = [];
+for (const product of json.data) {
+  const id = product.id;
+  const name = product.name;
+  const image = product.images[0];
+  const price = product.default_price.unit_amount;
+  const description = product.description;
+  const priceId = product.default_price.id;
+  const quantity = product.metadata?.quantity ?? 0;
+  if (name && image && price && id && priceId && quantity > 0) {
+    const prettyPrice = (price / 100).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+    products.push({
+      id,
+      priceId,
+      name,
+      image,
+      price,
+      prettyPrice,
+      description,
+      quantity,
+    });
+  }
+}
+const product = products.find((product) => product.id === params.slug);
+if (!product) {
+  throw Error("Could not get product.");
+}
 
 const quantityOptions = _.range(1, parseInt(product.quantity) + 1);
 ---

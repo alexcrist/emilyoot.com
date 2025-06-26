@@ -4,19 +4,15 @@ import ImageFullScreen from "../../components/ImageFullScreen.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadQuery } from "../../sanity/lib/loadQuery";
 
-const { params, props } = Astro;
+const { params } = Astro;
 
-export async function getStaticPaths() {
-  const { data } = await loadQuery<SanityDocument[]>({
-    query: `*[_type == "works"]|order(orderRank asc)`,
-  });
-  return data.map(({ slug }, index) => {
-    const prevSlug = index > 0 ? data[index - 1].slug.current : undefined;
-    const nextSlug =
-      index < data.length - 1 ? data[index + 1].slug.current : undefined;
-    return { params: { slug: slug.current }, props: { prevSlug, nextSlug } };
-  });
-}
+const { data } = await loadQuery<SanityDocument[]>({
+  query: `*[_type == "works"]|order(orderRank asc)`,
+});
+const index = data.findIndex(({ slug }) => slug.current === params.slug);
+const prevSlug = index > 0 ? data[index - 1].slug.current : undefined;
+const nextSlug =
+  index < data.length - 1 ? data[index + 1].slug.current : undefined;
 ---
 
 <BaseLayout noHeader noFooter>
@@ -24,7 +20,7 @@ export async function getStaticPaths() {
     sanityType="works"
     originPageUrl="/work"
     slug={params.slug}
-    prevSlug={props.prevSlug}
-    nextSlug={props.nextSlug}
+    prevSlug={prevSlug}
+    nextSlug={nextSlug}
   />
 </BaseLayout>
