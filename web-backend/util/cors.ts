@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const ALLOWED_ORIGINS = [
+  "https://www.emilyoot.com",
   "https://emilyoot.com",
   "http://localhost:4321",
   "https://alexcrist.github.io",

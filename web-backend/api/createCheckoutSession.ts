@@ -48,8 +48,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     line_items: lineItems,
     mode: "payment",
     payment_method_types: ["card"],
-    success_url: "https://emilyoot.com/thankyou",
-    cancel_url: "https://emilyoot.com/shop",
+    success_url: "https://www.emilyoot.com/thankyou",
+    cancel_url: "https://www.emilyoot.com/shop",
     billing_address_collection: "required",
     shipping_address_collection: {
       allowed_countries: ["US", "CA"],
