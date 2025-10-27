@@ -3,6 +3,7 @@ import type { SanityDocument } from "@sanity/client";
 import ImageFullScreen from "../../components/ImageFullScreen.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { loadQuery } from "../../sanity/lib/loadQuery";
+import { urlForImage } from "../../sanity/lib/urlForImage";
 
 const { params } = Astro;
 
@@ -13,9 +14,12 @@ const index = data.findIndex(({ slug }) => slug.current === params.slug);
 const prevSlug = index > 0 ? data[index - 1].slug.current : undefined;
 const nextSlug =
   index < data.length - 1 ? data[index + 1].slug.current : undefined;
+
+// Get the current work's image for open graph
+const openGraphImageUrl = urlForImage(data?.[index]?.image).url();
 ---
 
-<BaseLayout noHeader noFooter>
+<BaseLayout noHeader noFooter openGraphImageUrl={openGraphImageUrl}>
   <ImageFullScreen
     sanityType="works"
     originPageUrl="/work"

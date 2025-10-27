@@ -3,7 +3,7 @@ import Footer from "../components/Footer.astro";
 import Head from "../components/Head.astro";
 import Header from "../components/Header/Header.astro";
 
-const { noHeader, noFooter, noIndex } = Astro.props;
+const { noHeader, noFooter, noIndex, openGraphImageUrl } = Astro.props;
 ---
 
 <style>
@@ -29,7 +29,7 @@ const { noHeader, noFooter, noIndex } = Astro.props;
 </style>
 
 <html lang="en">
-  <Head noIndex={noIndex} />
+  <Head noIndex={noIndex} openGraphImageUrl={openGraphImageUrl} />
   <body>
     {!noHeader && <Header />}
     <div class="content">

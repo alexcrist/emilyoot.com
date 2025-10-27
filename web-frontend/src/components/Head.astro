@@ -6,9 +6,9 @@ const description =
 const canonicalUrl = "https://www.emilyoot.com" + Astro.url.pathname;
 
 const openGraphUrl = "https://www.emilyoot.com";
-const openGraphImageUrl = "https://www.emilyoot.com/open_graph_image.jpg";
+const defaultOpenGraphImageUrl = "https://www.emilyoot.com/open_graph_image.jpg";
 
-const { noIndex } = Astro.props;
+const { noIndex, openGraphImageUrl = defaultOpenGraphImageUrl } = Astro.props;
 ---
 
 <head>
